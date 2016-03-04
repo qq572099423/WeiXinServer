@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	<!-- 扫描的包路径 -->
+	<context:component-scan base-package="com.weixinserver" />
+	<!-- 添加注解驱动 -->
+	<mvc:annotation-driven />
+	<!-- 添加静态资源文件映射 -->
+	<mvc:resources location="/WEB-INF/res/" mapping="/resources/**/*" />
+	<!--如果没有配置这个拦截器则会报如下异常 -->
+	<!-- Could not obtain transaction-synchronized Session for current thread -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean name="openSessionInViewInterceptor"
+				class="org.springframework.orm.hibernate5.support.OpenSessionInViewInterceptor">
+				<property name="sessionFactory" ref="sessionFactory"></property>
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	<!-- <security:http use-expressions="true">
+		<security:intercept-url pattern="/**"
+			access="isAuthenticated()" />
+		<security:http-basic />
+	</security:http>
+
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:user-service>
+				<security:user name="user" password="user1Pass"
+					authorities="ROLE_USER" />
+			</security:user-service>
+		</security:authentication-provider>
+	</security:authentication-manager> -->
+</beans>
